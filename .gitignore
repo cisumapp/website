@@ -1,0 +1,13 @@
+/Skills+Documentation
+/.github
+/.next
+/node_modules
+CLAUDE.md
+AGENTS.md
+/.idea
+/.agent
+/.codex
+/.gemini
+/.kiro
+/.opencode
+.DS_Store
