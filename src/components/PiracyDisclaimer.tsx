@@ -57,7 +57,7 @@ export function PiracyDisclaimer() {
                         Leave the high seas behind.
                     </h2>
                     <p className="text-zinc-400 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
-                        Distribute is built for your owned library. Support the artists you love by purchasing their music.
+                        cisum is built for your owned library. Support the artists you love by purchasing their music.
                     </p>
                 </motion.div>
 

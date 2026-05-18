@@ -58,7 +58,7 @@ export default function LicensePage() {
                         transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
                         className="text-lg md:text-xl text-zinc-400 max-w-2xl leading-relaxed"
                     >
-                        Distribute is open source software. We believe in transparency and community-driven development.
+                        cisum is open source software. We believe in transparency and community-driven development.
                     </motion.p>
                 </header>
 
@@ -82,7 +82,7 @@ export default function LicensePage() {
                             <div className="font-mono text-sm md:text-base text-zinc-400 leading-relaxed whitespace-pre-wrap">
                                 {`MIT License
 
-Copyright (c) 2026 sourcelocation
+Copyright (c) 2026 Aarav Gupta
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

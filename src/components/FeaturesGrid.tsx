@@ -45,14 +45,24 @@ export function FeaturesGrid() {
                                 <Server className="h-6 w-6" />
                             </div>
                             <h3 className="text-3xl font-bold leading-tight text-white mb-4">
-                                Home Server<br />Sync
+                                Bring your data
                             </h3>
                             <p className="text-base text-zinc-400 relative z-20">
-                                Direct connection to your personal storage. No clouds, no subscriptions. Just your data.
+                                Connect to your fav streaming platform.
+                                <br />
+                                <br />
+                                
+                                <ol>
+                                    <li>Spotify</li>
+                                    <li>Apple Music</li>
+                                    <li>Tidal</li>
+                                    <li>Deezer</li>
+                                    <li>Qobuz</li>
+                                </ol>
                             </p>
                         </div>
 
-                        <div className="mt-4 flex-1 relative flex items-center justify-center">
+                        {/* <div className="mt-4 flex-1 relative flex items-center justify-center">
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 h-full w-px bg-gradient-to-b from-zinc-700 to-transparent z-20" />
 
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 h-10 w-24 rounded-lg border border-zinc-700 bg-zinc-900/80 backdrop-blur flex items-center justify-center z-30 shadow-2xl transform text-[10px]">
@@ -62,7 +72,7 @@ export function FeaturesGrid() {
                             <div className="absolute -bottom-[280px] left-1/2 -translate-x-1/2 w-[400px] h-[400px] opacity-100 pointer-events-none">
                                 <GlobeAnimation />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 pointer-events-none z-10" />
@@ -98,9 +108,13 @@ export function FeaturesGrid() {
                         <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-800 text-white">
                             <Share2 className="h-6 w-6" />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Decentralized</h3>
+                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                            Highest Quality Music.
+                            <br />
+                            Ad free.
+                        </h3>
                         <p className="text-sm text-zinc-400 leading-relaxed">
-                            Distributor operates completely independently of any central authority. You're the sole owner of your server, and your music library.
+                            Stream your music in the best quality possible, all without ads or distractions.
                         </p>
                     </div>
                 </motion.div>

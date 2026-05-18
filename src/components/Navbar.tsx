@@ -19,7 +19,7 @@ export function Navbar() {
       </Link>
       <div className="flex items-center gap-8">
         <Link href="#" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:block">Updates</Link>
-        <a href="https://distribute-docs.sourceloc.net/docs" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:flex items-center gap-2">
+        <a href="https://github.com/cisumapp/cisum/" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:flex items-center gap-2">
           <FileText className="h-4 w-4" />
           Documentation
         </a>

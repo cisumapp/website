@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 const googleSansFlex = localFont({
-  src: "../fonts/google-sans-flex.ttf",
+  src: "../../public/fonts/google-sans-flex.ttf",
   variable: "--font-google-sans-flex",
   display: "swap",
   weight: "100 1000",

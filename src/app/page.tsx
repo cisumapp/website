@@ -37,6 +37,8 @@ const stagger = {
   },
 };
 
+const heroText = "an experience, like no other.";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-clip">
@@ -86,9 +88,9 @@ export default function Home() {
               hidden: {},
             }}
             className="relative z-10 mb-6 max-w-4xl text-6xl font-bold tracking-tight md:text-7xl lg:text-8xl [font-stretch:125%]"
-            aria-label="Your music. Your server. Period."
+            aria-label="hero-text"
           >
-            {"Your music. Your server. Period.".split(" ").map((word, i) => (
+            {heroText.split(" ").map((word, i) => (
               <motion.span
                 key={i}
                 variants={{
@@ -108,8 +110,9 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 mb-12 max-w-2xl text-lg text-zinc-400 md:text-xl lg:text-2xl leading-relaxed"
           >
-            Distribute is an offline-first streaming music app that connects to your home server.
-            Cross-sync servers to expand your library.
+            cisum is a music streaming app that caters to your needs.
+            <br />
+            a never ending library, all with no ads, no distractions.
           </motion.p>
 
           <motion.div
@@ -122,7 +125,7 @@ export default function Home() {
               <Link href="/downloads">Download App</Link>
             </Button>
             <Button variant="ghost" size="lg" className="h-14 rounded-full text-base font-medium text-zinc-400 hover:text-white hover:bg-white/10 transition-all" asChild>
-              <a href="https://discord.gg/Mb4F9Gmuex">Join the Community</a>
+              <a href="/play">Open Web Player</a>
             </Button>
           </motion.div>
         </section>
@@ -130,8 +133,6 @@ export default function Home() {
         <FeaturesGrid />
 
         <AppLayersAnimation />
-
-        <PiracyDisclaimer />
 
         <ClosingSection />
       </main>
@@ -154,14 +155,16 @@ function ClosingSection() {
       transition={{ duration: 1 }}
       className="relative mt-48 flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
-      {startPhysics && <VinylPhysics titleRef={titleRef} />}
+      {/* {startPhysics && <VinylPhysics titleRef={titleRef} />} */}
 
       <div className="relative z-10 flex flex-col items-center">
         <Badge variant="outline" className="mb-6 border-zinc-800 bg-black/50 py-1.5 text-zinc-400 backdrop-blur-md">
           Ready to start?
         </Badge>
         <h2 ref={titleRef} className="mb-8 max-w-2xl text-4xl font-bold tracking-tight md:text-6xl text-white drop-shadow-2xl [font-stretch:125%]">
-          Stop renting your music. Install Distribute.
+          stop kneeling to large corps. 
+          <br />
+          try cisum.
         </h2>
         <Button
           size="lg"

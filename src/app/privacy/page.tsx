@@ -51,7 +51,7 @@ export default function PrivacyPage() {
                         <section>
                             <h2 className="text-xl font-semibold text-white mb-4">Our Commitment</h2>
                             <p className="text-zinc-400 leading-relaxed text-lg">
-                                Distribute is built on the principle of digital sovereignty. We believe your data should belong to you, and only you.
+                                cisum is built on the principle of digital sovereignty. We believe your data should belong to you, and only you.
                             </p>
                         </section>
 

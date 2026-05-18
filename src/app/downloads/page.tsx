@@ -76,7 +76,7 @@ export default function DownloadsPage() {
                             Downloads
                         </Badge>
                         <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl mb-6">
-                            Get Distribute
+                            Get App
                         </h1>
                         <p className="max-w-2xl mx-auto text-lg text-zinc-400 md:text-xl leading-relaxed">
                             Available on all your devices. Connect your server and start streaming.
