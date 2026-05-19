@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Play, Pause, SkipForward, SkipBack, Shuffle, Repeat, 
-  Volume2, VolumeX, Heart, ListMusic, MessageSquare, 
-  MoreHorizontal, Star, Share2, Disc
+import {
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  Shuffle,
+  Repeat,
+  Volume2,
+  VolumeX,
+  Heart,
+  ListMusic,
+  MoreHorizontal,
+  Share2,
+  Disc,
 } from 'lucide-react';
 
 interface FloatingPlayerProps {
@@ -25,6 +35,36 @@ interface FloatingPlayerProps {
   onVolumeChange?: (volume: number) => void;
 }
 
+type IconButtonProps = {
+  children: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  active?: boolean;
+  disabled?: boolean;
+};
+
+const IconButton = ({
+  children,
+  label,
+  onClick,
+  active = false,
+  disabled = false,
+}: IconButtonProps) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    aria-label={label}
+    className={`flex h-11 w-11 items-center justify-center rounded-full border transition ${
+      active
+        ? 'border-white/[0.18] bg-white/[0.14] text-white'
+        : 'border-white/[0.10] bg-white/[0.06] text-white/65 hover:bg-white/[0.12] hover:text-white'
+    } ${disabled ? 'cursor-not-allowed opacity-40 hover:bg-white/[0.06] hover:text-white/65' : ''}`}
+  >
+    {children}
+  </button>
+);
+
 export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({
   activeTrack,
   isPlaying = false,
@@ -42,6 +82,18 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState(false);
 
+  const totalSeconds = 231;
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
+
+  const elapsedSeconds = Math.floor((progress / 100) * totalSeconds);
+  const remainingSeconds = Math.max(totalSeconds - elapsedSeconds, 0);
+
   const toggleMute = () => {
     if (isMuted) {
       onVolumeChange?.(prevVolume);
@@ -53,167 +105,160 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({
     }
   };
 
-  // Format progress to display time e.g. 0:24 and 3:51
-  const getElapsedText = () => {
-    if (!activeTrack) return '0:00';
-    const totalSeconds = 231; // 3:51 in seconds
-    const elapsedSeconds = Math.floor((progress / 100) * totalSeconds);
-    const mins = Math.floor(elapsedSeconds / 60);
-    const secs = elapsedSeconds % 60;
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  };
+  const hasPrev = typeof onPrev === 'function';
+  const hasNext = typeof onNext === 'function';
 
   return (
     <motion.div
-      initial={{ y: -55, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className="flex items-center justify-between px-6 py-2.5 rounded-full border border-white/[0.06] bg-[#1a1a1a]/75 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] w-[820px] pointer-events-auto select-none flex-shrink-0"
+      initial={{ y: 18, opacity: 0, scale: 0.98 }}
+      animate={{ y: 0, opacity: 1, scale: 1 }}
+      className="player-bar player-bar__floating-player w-full max-w-[1180px] pointer-events-auto select-none"
     >
-      {/* Left Section: Artwork, Track/Artist Info and integrated scrubber */}
-      <div className="flex items-center gap-3 w-[280px] min-w-0 flex-shrink-0">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-900 border border-white/10 flex items-center justify-center relative overflow-hidden flex-shrink-0 shadow-md">
-          {activeTrack ? (
-            <div 
-              className="w-full h-full bg-cover bg-center transition-all duration-500" 
-              style={{ 
-                backgroundImage: `url('${activeTrack.coverArt || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=120&auto=format&fit=crop" }')` 
-              }} 
-            />
-          ) : (
-            <Disc className="w-5 h-5 text-zinc-500 animate-spin" style={{ animationDuration: '3s' }} />
-          )}
-        </div>
-        <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-          <div className="flex items-baseline gap-1.5 min-w-0">
-            <h4 className="text-[11px] font-bold text-white truncate uppercase tracking-wider">
-              {activeTrack ? activeTrack.title : 'Not Playing'}
-            </h4>
-            <span className="text-[9px] text-zinc-400 font-semibold truncate uppercase tracking-wider">
-              - {activeTrack ? activeTrack.artist : 'Select track'}
-            </span>
-          </div>
-
-          {/* Mini-seek timeline bar and elapsed/duration text */}
-          <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[8px] text-zinc-500 font-bold select-none min-w-[20px]">
-              {getElapsedText()}
-            </span>
-            <div
-              className="flex-1 h-[2px] rounded-full bg-zinc-800 relative cursor-pointer group py-1"
-              onClick={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const percent = ((e.clientX - rect.left) / rect.width) * 100;
-                onProgressChange?.(percent);
-              }}
-            >
-              <div className="absolute top-[3px] left-0 h-[2px] rounded-full bg-zinc-400 w-full" style={{ width: `${progress}%` }} />
+      <div className="rounded-[28px] border border-white/[0.12] bg-[#0b0f16]/84 px-4 py-4 shadow-[0_28px_80px_rgba(0,0,0,0.5)] backdrop-blur-[48px] sm:px-5">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_auto_minmax(0,1fr)] lg:items-center">
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[18px] border border-white/[0.10] bg-white/[0.06] shadow-[0_12px_32px_rgba(0,0,0,0.38)]">
+              {activeTrack ? (
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url('${activeTrack.coverArt || 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=120&auto=format&fit=crop'}')`,
+                  }}
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.03)_100%)]">
+                  <Disc className="h-6 w-6 text-white/45" />
+                </div>
+              )}
             </div>
-            <span className="text-[8px] text-zinc-500 font-bold select-none min-w-[20px] text-right">
-              {activeTrack ? '3:51' : '--:--'}
-            </span>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h4 className="truncate text-[15px] font-semibold text-white sm:text-[17px]">
+                  {activeTrack ? activeTrack.title : 'Not playing'}
+                </h4>
+                <span className="rounded-full border border-white/[0.10] bg-white/[0.06] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.24em] text-white/55">
+                  320kb/s
+                </span>
+              </div>
+              <p className="mt-1 truncate text-sm text-white/55">
+                {activeTrack ? activeTrack.artist : 'Select a track to start playback'}
+              </p>
+
+              <div className="mt-3 flex items-center gap-3">
+                <span className="min-w-[44px] text-[10px] font-semibold uppercase tracking-[0.24em] text-white/35">
+                  {activeTrack ? formatTime(elapsedSeconds) : '0:00'}
+                </span>
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    if (!onProgressChange) return;
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    const percent = ((event.clientX - rect.left) / rect.width) * 100;
+                    onProgressChange(percent);
+                  }}
+                  className="group relative h-2 flex-1 overflow-hidden rounded-full bg-white/[0.10]"
+                  aria-label="Seek playback"
+                >
+                  <div
+                    className="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0.45)_0%,rgba(255,255,255,0.92)_100%)]"
+                    style={{ width: `${progress}%` }}
+                  />
+                  <div className="absolute inset-0 bg-white/[0.0] transition group-hover:bg-white/[0.05]" />
+                </button>
+                <span className="min-w-[44px] text-right text-[10px] font-semibold uppercase tracking-[0.24em] text-white/35">
+                  {activeTrack ? `-${formatTime(remainingSeconds)}` : '--:--'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center gap-2 sm:gap-3">
+            <IconButton
+              label="Shuffle"
+              onClick={() => setShuffle((current) => !current)}
+              active={shuffle}
+            >
+              <Shuffle className="h-4 w-4" />
+            </IconButton>
+
+            <IconButton label="Previous track" onClick={onPrev} disabled={!hasPrev}>
+              <SkipBack className="h-4 w-4 fill-current stroke-none" />
+            </IconButton>
+
+            <button
+              type="button"
+              onClick={onPlayPause}
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-[#070c14] shadow-[0_14px_34px_rgba(255,255,255,0.18)] transition hover:scale-[1.02] active:scale-95"
+              aria-label={isPlaying ? 'Pause' : 'Play'}
+            >
+              {isPlaying ? (
+                <Pause className="h-5 w-5 fill-[#070c14] stroke-none" />
+              ) : (
+                <Play className="ml-0.5 h-5 w-5 fill-[#070c14] stroke-none" />
+              )}
+            </button>
+
+            <IconButton label="Next track" onClick={onNext} disabled={!hasNext}>
+              <SkipForward className="h-4 w-4 fill-current stroke-none" />
+            </IconButton>
+
+            <IconButton
+              label="Repeat"
+              onClick={() => setRepeat((current) => !current)}
+              active={repeat}
+            >
+              <Repeat className="h-4 w-4" />
+            </IconButton>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 lg:justify-end">
+            <div className="flex items-center gap-2">
+              <IconButton
+                label="Favorite"
+                onClick={() => setIsFavorite((current) => !current)}
+                active={isFavorite}
+              >
+                <Heart className={`h-4 w-4 ${isFavorite ? 'fill-white stroke-none' : ''}`} />
+              </IconButton>
+
+              <IconButton label="More options">
+                <MoreHorizontal className="h-4 w-4" />
+              </IconButton>
+
+              <IconButton label="Share">
+                <Share2 className="h-4 w-4" />
+              </IconButton>
+
+              <IconButton label="Queue">
+                <ListMusic className="h-4 w-4" />
+              </IconButton>
+            </div>
+
+            <div className="hidden items-center gap-2 rounded-full border border-white/[0.10] bg-white/[0.06] px-3 py-2 text-white/70 md:flex">
+              <button type="button" onClick={toggleMute} className="transition hover:text-white" aria-label="Mute">
+                {volume === 0 || isMuted ? (
+                  <VolumeX className="h-4 w-4 text-white/45" />
+                ) : (
+                  <Volume2 className="h-4 w-4" />
+                )}
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={isMuted ? 0 : volume * 100}
+                onChange={(event) => {
+                  const valueAsNumber = parseFloat(event.target.value) / 100;
+                  onVolumeChange?.(valueAsNumber);
+                  if (valueAsNumber > 0) setIsMuted(false);
+                }}
+                className="w-24 cursor-pointer accent-white"
+                aria-label="Volume"
+              />
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Center Section: Core Media Mechanical controls */}
-      <div className="flex items-center justify-center gap-4 flex-1">
-        {/* Shuffle */}
-        <button
-          onClick={() => setShuffle(!shuffle)}
-          className={`transition duration-200 cursor-pointer ${shuffle ? 'text-zinc-200' : 'text-zinc-500 hover:text-zinc-300'}`}
-        >
-          <Shuffle className="w-4 h-4" />
-        </button>
-
-        {/* Skip Back */}
-        <button
-          onClick={onPrev}
-          className="text-zinc-400 hover:text-white transition duration-200 cursor-pointer active:scale-90"
-        >
-          <SkipBack className="w-4 h-4 fill-current stroke-none" />
-        </button>
-
-        {/* Play/Pause */}
-        <button
-          onClick={onPlayPause}
-          className="text-white hover:text-zinc-200 flex items-center justify-center transition duration-200 cursor-pointer active:scale-95 hover:scale-105"
-        >
-          {isPlaying ? (
-            <Pause className="w-5 h-5 fill-white stroke-none" />
-          ) : (
-            <Play className="w-5 h-5 fill-white stroke-none ml-0.5" />
-          )}
-        </button>
-
-        {/* Skip Forward */}
-        <button
-          onClick={onNext}
-          className="text-zinc-400 hover:text-white transition duration-200 cursor-pointer active:scale-90"
-        >
-          <SkipForward className="w-4 h-4 fill-current stroke-none" />
-        </button>
-
-        {/* Repeat */}
-        <button
-          onClick={() => setRepeat(!repeat)}
-          className={`transition duration-200 cursor-pointer ${repeat ? 'text-zinc-200' : 'text-zinc-500 hover:text-zinc-300'}`}
-        >
-          <Repeat className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Right Section: Volume Slider, AirPlay and visual actions */}
-      <div className="flex items-center justify-end gap-3.5 w-[280px] text-zinc-400 flex-shrink-0">
-        {/* Options */}
-        <button className="hover:text-white transition duration-200 cursor-pointer">
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
-
-        {/* Favorite */}
-        <button
-          onClick={() => setIsFavorite(!isFavorite)}
-          className={`transition duration-200 cursor-pointer ${isFavorite ? 'text-blue-400 hover:text-blue-300' : 'hover:text-white'}`}
-        >
-          <Heart className={`w-4 h-4 ${isFavorite ? 'fill-blue-400 stroke-none' : ''}`} />
-        </button>
-
-        {/* Airplay / Output */}
-        <button className="hover:text-white transition duration-200 cursor-pointer">
-          <Share2 className="w-4 h-4" />
-        </button>
-
-        {/* Volume control */}
-        <div className="flex items-center gap-1.5 group/vol">
-          <button onClick={toggleMute} className="hover:text-white cursor-pointer transition">
-            {volume === 0 || isMuted ? (
-              <VolumeX className="w-4 h-4 text-zinc-500" />
-            ) : (
-              <Volume2 className="w-4 h-4" />
-            )}
-          </button>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={isMuted ? 0 : volume * 100}
-            onChange={(e) => {
-              const val = parseFloat(e.target.value) / 100;
-              onVolumeChange?.(val);
-              if (val > 0) setIsMuted(false);
-            }}
-            className="w-14 h-1 rounded-full bg-zinc-800 appearance-none cursor-pointer accent-white focus:outline-none transition group-hover/vol:w-16"
-          />
-        </div>
-
-        {/* Lyrics */}
-        <button className="hover:text-white transition duration-200 cursor-pointer">
-          <MessageSquare className="w-4 h-4" />
-        </button>
-
-        {/* Queue list */}
-        <button className="hover:text-white transition duration-200 cursor-pointer">
-          <ListMusic className="w-4 h-4" />
-        </button>
       </div>
     </motion.div>
   );

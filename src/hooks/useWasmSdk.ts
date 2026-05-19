@@ -1,120 +1,156 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import md5 from 'blueimp-md5';
+import posthog from 'posthog-js';
+import type { MusicTrack, ResolvedStreamPayload } from '@/lib/music/types';
 
-export interface WasmTrack {
-  title: string;
-  artist: string;
-  provider: string;
-  trackId: string;
-  duration: string;
-  coverArt?: string;
-  artistImage?: string;
-  albumTitle?: string;
-}
+export type WasmTrack = MusicTrack;
 
 export function useWasmSdk() {
   const [initialized, setInitialized] = useState(false);
   const [searchResults, setSearchResults] = useState<WasmTrack[]>([]);
-  const [activeTrack, setActiveTrack] = useState<{ 
-    title: string; 
-    artist: string; 
-    url: string; 
-    provider?: string;
-    coverArt?: string;
-    artistImage?: string;
-    albumTitle?: string;
-  } | null>(null);
+  const [activeTrack, setActiveTrack] = useState<ResolvedStreamPayload | null>(null);
   const [isSearching, setIsSearching] = useState(false);
-  const activeProviderRef = useRef<string>('');
+  const searchRequestIdRef = useRef(0);
+  const playRequestIdRef = useRef(0);
 
   useEffect(() => {
-    // 1. Inject prerequisite globals required by the Swift browser-shim
-    if (typeof window !== 'undefined') {
-      // Bundle and set the MD5 global to optimize load time (no CDN fetching)
-      if (!window.md5) {
-        window.md5 = md5;
-      }
+    let cancelled = false;
 
-      // 2. Register standard callbacks that Swift WASM calls back into JS
-      window.updateSearchResults = (tracks: WasmTrack[]) => {
-        // Normalize the provider casing/name for the UI if needed
-        const formattedTracks = tracks.map(track => ({
-          ...track,
-          provider: track.provider ? track.provider.toUpperCase() : 'UNKNOWN'
-        }));
-        setSearchResults(formattedTracks);
-        setIsSearching(false);
-      };
-
-      window.playAudio = (
-        url: string, 
-        title: string, 
-        artist: string, 
-        cover?: string, 
-        artistImage?: string, 
-        albumTitle?: string
-      ) => {
-        let finalUrl = url;
-        // Redirect cross-origin or hotlink-protected audio streams through our local HTTP/seek proxy
-        if (url && (
-          url.includes('tidal.com') || 
-          url.includes('dzcdn.net') || 
-          url.includes('qobuz.com') || 
-          url.includes('samidy.com') || 
-          url.includes('monochrome.tf') ||
-          url.startsWith('http://') || 
-          url.startsWith('https://')
-        )) {
-          finalUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
-        }
-        setActiveTrack({ 
-          url: finalUrl, 
-          title, 
-          artist, 
-          provider: activeProviderRef.current,
-          coverArt: cover,
-          artistImage: artistImage,
-          albumTitle: albumTitle
+    const bootstrap = async () => {
+      try {
+        await fetch('/api/music/health', {
+          method: 'GET',
+          cache: 'no-store',
         });
-      };
-
-      // 3. Dynamically import the compiled Swift package on the client side only
-      const initWasm = async () => {
-        try {
-          // Dynamic import of our copied glue code
-          const { init } = await import('@/wasm/index.js' as any);
-          
-          // Initialize using the static WASM stream
-          await init({
-            module: fetch('/wasm/ProviderSDKWasm.wasm')
-          });
-          
+      } catch (error) {
+        posthog.captureException(error);
+        console.error('Failed to warm music gateway:', error);
+      } finally {
+        if (!cancelled) {
           setInitialized(true);
-          console.log("🚀 Swift WASM Engine Hooked and Booted!");
-        } catch (error) {
-          console.error("Failed to boot Swift WASM Engine:", error);
+          posthog.capture('music_gateway_initialized');
         }
-      };
+      }
+    };
 
-      initWasm();
-    }
+    bootstrap();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // 4. Swift WASM Interface Methods
-  const search = (query: string) => {
-    if (!initialized || !window.performWasmSearch) return;
+  const search = async (query: string) => {
+    if (!initialized) return;
+
+    const requestId = ++searchRequestIdRef.current;
     setIsSearching(true);
-    window.performWasmSearch(query);
+    setSearchResults([]);
+
+    try {
+      const response = await fetch('/api/music/search', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Search request failed with status ${response.status}`);
+      }
+
+      if (!response.body) {
+        throw new Error('Response body is null');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let accumulatedTracks: WasmTrack[] = [];
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done || requestId !== searchRequestIdRef.current) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const chunk = JSON.parse(line) as { tracks?: WasmTrack[]; error?: string };
+            if (chunk.error) {
+              throw new Error(chunk.error);
+            }
+            if (chunk.tracks && chunk.tracks.length > 0) {
+              if (requestId !== searchRequestIdRef.current) {
+                return;
+              }
+              const formatted = chunk.tracks.map((track) => ({
+                ...track,
+                provider: track.provider ? track.provider.toUpperCase() : 'UNKNOWN',
+              }));
+              accumulatedTracks = [...accumulatedTracks, ...formatted];
+              setSearchResults([...accumulatedTracks]);
+            }
+          } catch (e) {
+            console.error('Error parsing search stream chunk:', e);
+          }
+        }
+      }
+    } catch (error) {
+      if (requestId === searchRequestIdRef.current) {
+        posthog.captureException(error);
+        console.error('Search request failed:', error);
+      }
+    } finally {
+      if (requestId === searchRequestIdRef.current) {
+        setIsSearching(false);
+      }
+    }
   };
 
-  const play = (provider: string, trackId: string) => {
-    if (!initialized || !window.playWasmTrack) return;
-    // Providers in Swift are lowercase e.g. "qqmusic", "kuwo"
-    const normalizedProvider = provider.toLowerCase();
-    activeProviderRef.current = normalizedProvider;
-    window.playWasmTrack(normalizedProvider, trackId);
+  const play = async (provider: string, trackId: string) => {
+    if (!initialized) return;
+
+    const requestId = ++playRequestIdRef.current;
+
+    try {
+      const response = await fetch('/api/music/play', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          provider,
+          trackId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Playback request failed with status ${response.status}`);
+      }
+
+      const payload = await response.json() as { playback?: ResolvedStreamPayload };
+      if (requestId !== playRequestIdRef.current || !payload.playback) {
+        return;
+      }
+
+      setActiveTrack({
+        ...payload.playback,
+        provider: payload.playback.provider.toUpperCase(),
+      });
+    } catch (error) {
+      if (requestId === playRequestIdRef.current) {
+        posthog.captureException(error);
+        console.error('Playback request failed:', error);
+      }
+    }
   };
 
   return {
@@ -125,15 +161,4 @@ export function useWasmSdk() {
     search,
     play,
   };
-}
-
-// Declaring global window hooks to keep TypeScript compiler happy
-declare global {
-  interface Window {
-    md5: any;
-    performWasmSearch?: (query: string) => void;
-    playWasmTrack?: (provider: string, trackId: string) => void;
-    updateSearchResults?: (tracks: WasmTrack[]) => void;
-    playAudio?: (url: string, title: string, artist: string) => void;
-  }
 }

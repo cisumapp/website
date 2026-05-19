@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FileText, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import posthog from "posthog-js";
 
 export function Navbar() {
   return (
@@ -19,11 +20,11 @@ export function Navbar() {
       </Link>
       <div className="flex items-center gap-8">
         <Link href="#" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:block">Updates</Link>
-        <a href="https://github.com/cisumapp/cisum/" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:flex items-center gap-2">
+        <a href="https://github.com/cisumapp/cisum/" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:flex items-center gap-2" onClick={() => posthog.capture("documentation_clicked")}>
           <FileText className="h-4 w-4" />
           Documentation
         </a>
-        <a href="https://discord.gg/Mb4F9Gmuex" className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-zinc-800">
+        <a href="https://discord.gg/Mb4F9Gmuex" className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-zinc-800" onClick={() => posthog.capture("discord_link_clicked")}>
           <MessageCircle className="h-4 w-4" />
           Discord
         </a>

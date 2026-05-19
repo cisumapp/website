@@ -13,6 +13,7 @@ import {
   ArtistHero, FloatingPlayer, VinylArtwork 
 } from '@/components/glass';
 import { NavPill } from '@/components/glass/NavPill';
+import posthog from "posthog-js";
 
 export default function MusicPlayerPage() {
   const [query, setQuery] = useState('Linkin Park');
@@ -43,6 +44,7 @@ export default function MusicPlayerPage() {
     e.preventDefault();
     if (query.trim()) {
       search(query.trim());
+      posthog.capture("music_searched", { query: query.trim() });
     }
   };
 
@@ -55,6 +57,7 @@ export default function MusicPlayerPage() {
   // Play track via WASM resolver
   const handlePlayTrack = (track: WasmTrack) => {
     play(track.provider, track.trackId);
+    posthog.capture("track_played", { title: track.title, artist: track.artist, provider: track.provider, track_id: track.trackId });
   };
 
   // Handle Play/Pause toggling
@@ -295,7 +298,12 @@ export default function MusicPlayerPage() {
               {playlistItems.map((pl) => (
                 <button
                   key={pl.id}
-                  onClick={() => { setActivePlaylist(pl.id); triggerQuickSearch(pl.id === 'lp' ? 'Linkin Park' : 'Frank Ocean'); }}
+                  onClick={() => {
+                    setActivePlaylist(pl.id);
+                    const searchTerm = pl.id === 'lp' ? 'Linkin Park' : 'Frank Ocean';
+                    triggerQuickSearch(searchTerm);
+                    posthog.capture("playlist_selected", { playlist_id: pl.id, playlist_title: pl.title });
+                  }}
                   className={`flex items-center gap-3 px-3 py-2 rounded-xl transition duration-200 cursor-pointer text-left w-full ${
                     activePlaylist === pl.id ? 'bg-white/[0.08] text-white' : 'text-zinc-400 hover:bg-white/[0.03] hover:text-zinc-200'
                   }`}
@@ -348,7 +356,7 @@ export default function MusicPlayerPage() {
         </div>
 
         {/* FLOATING PLAYBACK CAPSULE: Center Top Bar */}
-        <div className="w-full flex justify-center py-4 z-40 relative bg-black/10 border-b border-white/[0.04]">
+        <div className="w-full flex justify-center px-4 pt-4 md:pt-6 z-40 relative pointer-events-none">
           <FloatingPlayer
             activeTrack={activeTrack}
             isPlaying={isPlaying}
@@ -393,16 +401,22 @@ export default function MusicPlayerPage() {
               activeTab={activeTab}
               onTabChange={setActiveTab}
               onPlayAll={() => {
-                if (searchResults.length > 0) handlePlayTrack(searchResults[0]);
-                else handlePlayTrack(sampleTracks[0]);
+                const track = searchResults.length > 0 ? searchResults[0] : sampleTracks[0];
+                handlePlayTrack(track);
+                posthog.capture("play_all_clicked", { artist: activeHeroName });
               }}
               onShuffle={() => {
                 const trackList = searchResults.length > 0 ? searchResults : sampleTracks;
                 const randomIndex = Math.floor(Math.random() * trackList.length);
                 handlePlayTrack(trackList[randomIndex]);
+                posthog.capture("shuffle_clicked", { artist: activeHeroName, track_count: trackList.length });
               }}
               isFavorited={isFavoritedArtist}
-              onToggleFavorite={() => setIsFavoritedArtist(!isFavoritedArtist)}
+              onToggleFavorite={() => {
+                const newState = !isFavoritedArtist;
+                setIsFavoritedArtist(newState);
+                posthog.capture("artist_favorited", { artist: activeHeroName, favorited: newState });
+              }}
               searchQuery={query}
               onSearchChange={setQuery}
               onSearchSubmit={handleSearchSubmit}
@@ -469,6 +483,7 @@ export default function MusicPlayerPage() {
                 onClick={() => {
                   const trackList = searchResults.length > 0 ? searchResults : sampleTracks;
                   handlePlayTrack(trackList[0]);
+                  posthog.capture("latest_release_played", { album_title: latestAlbumTitle, artist: activeHeroName });
                 }}
               >
                 {/* Left Side: Large Square Album cover */}

@@ -8,6 +8,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import posthog from "posthog-js";
 
 type Platform = "windows" | "mac" | "linux" | "android" | "ios";
 
@@ -104,7 +105,7 @@ export default function DownloadsPage() {
                             <p className="text-zinc-500 mb-8 text-sm">Latest Version • Free</p>
 
                             <Button size="lg" className="w-full h-12 rounded-full bg-white text-black hover:bg-zinc-200 transition-all font-semibold" asChild>
-                                <a href={downloadUrl}>
+                                <a href={downloadUrl} onClick={() => posthog.capture("download_clicked", { platform, download_url: downloadUrl })}>
                                     Download Now
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </a>
@@ -129,6 +130,7 @@ export default function DownloadsPage() {
                                         key={p}
                                         href={DOWNLOAD_LINKS[p]}
                                         className="flex items-center gap-4 p-4 rounded-xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/50 transition-all group"
+                                        onClick={() => posthog.capture("platform_download_clicked", { platform: p, platform_name: PLATFORM_NAMES[p], download_url: DOWNLOAD_LINKS[p] })}
                                     >
                                         <div className="p-2 rounded-lg bg-zinc-800 text-zinc-400 group-hover:text-white transition-colors">
                                             <Icon className="w-5 h-5" />

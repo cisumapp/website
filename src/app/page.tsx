@@ -12,6 +12,7 @@ import { GridRuler } from "@/components/GridRuler";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import Link from 'next/link';
+import posthog from "posthog-js";
 
 const FeaturesGrid = dynamic(() => import("@/components/FeaturesGrid").then(mod => mod.FeaturesGrid), { ssr: false });
 const AppLayersAnimation = dynamic(() => import("@/components/AppLayersAnimation").then(mod => mod.AppLayersAnimation), { ssr: false });
@@ -122,10 +123,10 @@ export default function Home() {
             className="relative z-10 flex flex-col items-center gap-6 sm:flex-row"
           >
             <Button size="lg" className="h-14 rounded-full bg-white px-10 text-base font-medium text-black transition-all hover:bg-zinc-200 hover:scale-105 active:scale-95" asChild>
-              <Link href="/downloads">Download App</Link>
+              <Link href="/downloads" onClick={() => posthog.capture("hero_download_clicked")}>Download App</Link>
             </Button>
             <Button variant="ghost" size="lg" className="h-14 rounded-full text-base font-medium text-zinc-400 hover:text-white hover:bg-white/10 transition-all" asChild>
-              <a href="/play">Open Web Player</a>
+              <a href="/play" onClick={() => posthog.capture("web_player_opened")}>Open Web Player</a>
             </Button>
           </motion.div>
         </section>
@@ -171,7 +172,7 @@ function ClosingSection() {
           className="h-14 rounded-full bg-white px-10 text-base font-medium text-black transition-all hover:scale-105 active:scale-95 hover:bg-zinc-200 shadow-xl"
           asChild
         >
-          <Link href="/downloads">
+          <Link href="/downloads" onClick={() => posthog.capture("cta_download_clicked")}>
             Download App
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
