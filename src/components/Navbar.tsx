@@ -51,7 +51,9 @@ export function Navbar() {
           >
             Docs
           </button>
-          {/* <Link href="/docs" className="px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:text-white rounded-full hover:bg-white/5">Docs</Link> */}
+          {/* <Link href="/docs" className="px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:text-white rounded-full hover:bg-white/5">
+            Docs
+          </Link> */}
           <a
             href="https://discord.gg/Mb4F9Gmuex"
             target="_blank"

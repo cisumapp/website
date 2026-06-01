@@ -73,7 +73,7 @@ export function VinylAnimation() {
                     perspective: "1200px",
                     transformStyle: "preserve-3d",
                 }}
-                className="relative w-[600px] h-[600px] flex items-center justify-center"
+                className="relative w-[400px] h-[400px] md:w-[600px] md:h-[600px] flex items-center justify-center"
             >
                 <div className="relative w-full h-full" style={{ transformStyle: "preserve-3d", backfaceVisibility: "hidden" }}>
                     <SpinningDisk />

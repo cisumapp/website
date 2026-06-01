@@ -37,7 +37,7 @@ export function FeaturesGrid() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className="group relative overflow-hidden rounded-[2.5rem] bg-zinc-900 p-10 border border-zinc-800 h-[400px]"
+                    className="group relative overflow-hidden rounded-[2.5rem] bg-zinc-900 p-6 sm:p-8 md:p-10 border border-zinc-800 min-h-[320px] md:h-[400px]"
                 >
                     <div className="relative z-10 flex h-full flex-col justify-between">
                         <div>
@@ -83,7 +83,7 @@ export function FeaturesGrid() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="group relative overflow-hidden rounded-[2.5rem] bg-zinc-950 p-10 border border-zinc-800 hover:border-zinc-700 transition-colors h-[400px] flex flex-col justify-between"
+                    className="group relative overflow-hidden rounded-[2.5rem] bg-zinc-950 p-6 sm:p-8 md:p-10 border border-zinc-800 hover:border-zinc-700 transition-colors min-h-[320px] md:h-[400px] flex flex-col justify-between"
                 >
                     <div className="relative z-10">
                         <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-800 text-white">
@@ -102,7 +102,7 @@ export function FeaturesGrid() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="group relative overflow-hidden rounded-[2.5rem] bg-gradient-to-bl from-zinc-800 to-black p-10 border border-zinc-800 hover:border-zinc-700 transition-colors h-[400px] flex flex-col justify-between"
+                    className="group relative overflow-hidden rounded-[2.5rem] bg-gradient-to-bl from-zinc-800 to-black p-6 sm:p-8 md:p-10 border border-zinc-800 hover:border-zinc-700 transition-colors min-h-[320px] md:h-[400px] flex flex-col justify-between"
                 >
                     <div className="relative z-10">
                         <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-800 text-white">

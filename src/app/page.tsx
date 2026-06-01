@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 import { useState, useRef } from "react";
 import { VinylAnimation } from "@/components/VinylAnimation";
 import { GridRuler } from "@/components/GridRuler";
-import { LiquidNavbar } from "@/components/LiquidNavbar";
+import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BackgroundAudioPlayer } from "@/components/BackgroundAudioPlayer";
 import Link from "next/link";
@@ -18,10 +18,12 @@ import posthog from "posthog-js";
 const FeaturesGrid = dynamic(() =>
   import("@/components/FeaturesGrid").then((mod) => mod.FeaturesGrid),
 );
-const AppLayersAnimation = dynamic(() =>
-  import("@/components/AppLayersAnimation").then(
-    (mod) => mod.AppLayersAnimation,
-  ),
+const AppLayersAnimation = dynamic(
+  () =>
+    import("@/components/AppLayersAnimation").then(
+      (mod) => mod.AppLayersAnimation,
+    ),
+  { ssr: false },
 );
 
 const transition = {
@@ -71,7 +73,7 @@ export default function Home() {
           />
         </div>
 
-        <LiquidNavbar />
+        <Navbar />
 
         <main className="relative z-10 flex flex-col items-center pt-32 md:pt-48">
           <section className="relative flex flex-col items-center px-6 text-center">
@@ -111,7 +113,7 @@ export default function Home() {
                 visible: { transition: { staggerChildren: 0.1 } },
                 hidden: {},
               }}
-              className="relative z-10 mb-6 max-w-4xl text-6xl font-bold tracking-tight md:text-7xl lg:text-8xl"
+              className="relative z-10 mb-6 max-w-4xl text-5xl font-bold tracking-tight md:text-7xl lg:text-8xl"
               style={{
                 fontStretch: "125%",
                 fontVariationSettings: '"wdth" 125',
@@ -148,7 +150,7 @@ export default function Home() {
                 visible: { opacity: 1, y: 0, filter: "blur(0px)" },
               }}
               transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10 mb-12 max-w-2xl text-lg text-zinc-400 md:text-xl lg:text-2xl leading-relaxed"
+              className="relative z-10 mb-12 max-w-2xl text-base md:text-xl lg:text-2xl text-zinc-400 leading-relaxed px-4"
             >
               cisum is a music streaming app that caters to your needs.
               <br />a never ending library, all with no ads, no distractions.
@@ -174,10 +176,11 @@ export default function Home() {
               >
                 <Link
                   // href="/downloads"
-                  href="https://testflight.apple.com/join/DA8bhKJH"
+                  // href="https://testflight.apple.com/join/DA8bhKJH"
+                  href={"https://discord.gg/Mb4F9Gmuex"}
                   onClick={() => posthog.capture("hero_download_clicked")}
                 >
-                  Download App
+                  Join the Discord
                 </Link>
               </Button>
               {/* DISABLED: Web Player coming soon - using popup instead
@@ -223,7 +226,7 @@ function ClosingSection() {
         </Badge>
         <h2
           ref={titleRef}
-          className="mb-8 max-w-2xl text-4xl font-bold tracking-tight md:text-6xl text-white drop-shadow-2xl"
+          className="mb-8 max-w-2xl text-3xl font-bold tracking-tight md:text-6xl text-white drop-shadow-2xl"
           style={{ fontStretch: "125%", fontVariationSettings: '"wdth" 125' }}
         >
           stop kneeling to large corps.
@@ -236,10 +239,11 @@ function ClosingSection() {
           asChild
         >
           <Link
-            href="/downloads"
+            // href="/downloads"
+            href={"https://discord.gg/Mb4F9Gmuex"}
             onClick={() => posthog.capture("cta_download_clicked")}
           >
-            Download App
+            Join the Discord
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </Button>
