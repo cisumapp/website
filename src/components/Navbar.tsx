@@ -2,33 +2,67 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FileText, MessageCircle } from "lucide-react";
+import { useState } from "react";
 import Link from "next/link";
-import posthog from "posthog-js";
+import { UpdatesPopup } from "./UpdatesPopup";
+
+function openPopup(setOpen: (open: boolean) => void) {
+  setOpen(true);
+}
 
 export function Navbar() {
+  const [popupOpen, setPopupOpen] = useState(false);
+
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 2.0, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-      className="fixed top-0 z-50 flex w-full items-center justify-between px-6 py-8 md:px-12 backdrop-blur-sm bg-black/20"
-    >
-      <Link href="/" className="flex items-center gap-2">
-        <Image src="/app.png" alt="Distribute Logo" width={24} height={24} quality={90} className="rounded" />
-        <span className="text-xl font-bold tracking-tight [font-stretch:150%] text-white/90">cisum</span>
-      </Link>
-      <div className="flex items-center gap-8">
-        <Link href="#" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:block">Updates</Link>
-        <a href="https://github.com/cisumapp/cisum/" className="hidden text-sm font-medium text-zinc-500 transition-colors hover:text-white md:flex items-center gap-2" onClick={() => posthog.capture("documentation_clicked")}>
-          <FileText className="h-4 w-4" />
-          Documentation
-        </a>
-        <a href="https://discord.gg/Mb4F9Gmuex" className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-zinc-800" onClick={() => posthog.capture("discord_link_clicked")}>
-          <MessageCircle className="h-4 w-4" />
-          Discord
-        </a>
-      </div>
-    </motion.nav>
+    <>
+      <UpdatesPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 8 }}
+        transition={{ duration: 2.0, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        className="fixed top-0 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-2 py-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-md"
+      >
+        <Link href="/" className="flex items-center gap-2 px-3">
+          <Image
+            src="/app.jpg"
+            alt="cisum Logo"
+            width={20}
+            height={20}
+            quality={90}
+            className="rounded"
+          />
+          <span
+            className="text-sm font-bold tracking-tight text-white/90"
+            style={{ fontStretch: "125%", fontVariationSettings: '"wdth" 125' }}
+          >
+            cisum
+          </span>
+        </Link>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => openPopup(setPopupOpen)}
+            className="px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:text-white rounded-full hover:bg-white/5"
+          >
+            Updates
+          </button>
+          <button
+            onClick={() => openPopup(setPopupOpen)}
+            className="px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:text-white rounded-full hover:bg-white/5"
+          >
+            Docs
+          </button>
+          {/* <Link href="/docs" className="px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:text-white rounded-full hover:bg-white/5">Docs</Link> */}
+          <a
+            href="https://discord.gg/Mb4F9Gmuex"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[rgb(162,133,80)] rounded-full border border-[rgb(162,133,80)]/20 bg-[rgb(162,133,80)]/10 hover:bg-[rgb(162,133,80)]/20 transition-all"
+          >
+            <span>💬</span>
+            Discord
+          </a>
+        </div>
+      </motion.nav>
+    </>
   );
 }

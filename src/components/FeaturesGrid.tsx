@@ -11,7 +11,7 @@ export function FeaturesGrid() {
         <section className="relative z-10 w-full max-w-[1400px] px-6 mt-32">
 
             {/* Screenshot Background */}
-            <motion.div
+            {/* <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -29,9 +29,9 @@ export function FeaturesGrid() {
                         className="w-full"
                     />
                 </div>
-            </motion.div>
+            </motion.div> */}
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 relative z-10 pt-48 md:pt-[24rem]">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 relative z-10 pt-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -44,10 +44,10 @@ export function FeaturesGrid() {
                             <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-800 text-white">
                                 <Server className="h-6 w-6" />
                             </div>
-                            <h3 className="text-3xl font-bold leading-tight text-white mb-4">
+                            <h2 className="text-2xl font-bold leading-tight text-white mb-4">
                                 Bring your data
-                            </h3>
-                            <p className="text-base text-zinc-400 relative z-20">
+                            </h2>
+                            <div className="text-base text-zinc-400 relative z-20">
                                 Connect to your fav streaming platform.
                                 <br />
                                 <br />
@@ -59,7 +59,7 @@ export function FeaturesGrid() {
                                     <li>Deezer</li>
                                     <li>Qobuz</li>
                                 </ol>
-                            </p>
+                            </div>
                         </div>
 
                         {/* <div className="mt-4 flex-1 relative flex items-center justify-center">
@@ -90,7 +90,7 @@ export function FeaturesGrid() {
                             <Github className="h-6 w-6" />
                         </div>
 
-                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Open Source</h3>
+                        <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Open Source</h2>
                         <p className="text-sm text-zinc-400 leading-relaxed">
                             Auditable, transparent, and built by the community for the community. 100% free and open source.
                         </p>
@@ -108,11 +108,11 @@ export function FeaturesGrid() {
                         <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-800 text-white">
                             <Share2 className="h-6 w-6" />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                        <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                             Highest Quality Music.
                             <br />
                             Ad free.
-                        </h3>
+                        </h2>
                         <p className="text-sm text-zinc-400 leading-relaxed">
                             Stream your music in the best quality possible, all without ads or distractions.
                         </p>

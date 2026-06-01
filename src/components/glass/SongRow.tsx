@@ -72,9 +72,9 @@ export const SongRow: React.FC<SongRowProps> = ({
 
         {/* Title and Subtitle Info */}
         <div className="flex-1 min-w-0">
-          <h4 className={`text-xs font-bold truncate ${isActive ? 'text-blue-400' : 'text-white'}`}>
+          <p className={`text-xs font-bold truncate ${isActive ? 'text-blue-400' : 'text-white'}`}>
             {track.title}
-          </h4>
+          </p>
           <p className="text-[10px] text-zinc-500 truncate mt-0.5 group-hover:text-zinc-400 transition-colors">
             {getSubtext()}
           </p>
@@ -93,6 +93,7 @@ export const SongRow: React.FC<SongRowProps> = ({
         <button 
           onClick={(e) => { e.stopPropagation(); setIsDownloaded(!isDownloaded); }}
           className={`hover:text-white transition duration-200 cursor-pointer ${isDownloaded ? 'text-blue-400' : ''}`}
+          aria-label="Download"
         >
           <ArrowDown className="w-4 h-4" />
         </button>
@@ -101,12 +102,13 @@ export const SongRow: React.FC<SongRowProps> = ({
         <button 
           onClick={(e) => { e.stopPropagation(); setIsStarred(!isStarred); }}
           className={`hover:text-white transition duration-200 cursor-pointer ${isStarred ? 'text-blue-400 hover:text-blue-300' : ''}`}
+          aria-label="Favorite"
         >
           <Star className={`w-4 h-4 ${isStarred ? 'fill-blue-400 stroke-none' : ''}`} />
         </button>
 
         {/* Three-dots Options Icon */}
-        <button className="hover:text-white transition duration-200 cursor-pointer">
+        <button className="hover:text-white transition duration-200 cursor-pointer" aria-label="More options">
           <MoreHorizontal className="w-4 h-4" />
         </button>
 

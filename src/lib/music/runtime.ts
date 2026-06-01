@@ -59,6 +59,7 @@ function getGlobalState(): GlobalState {
   return globalThis as unknown as GlobalState;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizeTrack(track: any): MusicTrack {
   return {
     title: typeof track?.title === 'string' ? track.title : '',
@@ -216,6 +217,7 @@ export async function searchTracks(query: string): Promise<MusicTrack[]> {
 
     return await new Promise<MusicTrack[]>((resolve, reject) => {
       let settled = false;
+      // eslint-disable-next-line prefer-const
       let pending!: PendingSearch;
 
       const finalize = (callback: () => void) => {
@@ -312,6 +314,7 @@ export async function resolveStream(provider: string, trackId: string): Promise<
 
     return await new Promise<ResolvedStreamPayload>((resolve, reject) => {
       let settled = false;
+      // eslint-disable-next-line prefer-const
       let pending!: PendingPlay;
       const normalizedProvider = provider.toLowerCase();
 

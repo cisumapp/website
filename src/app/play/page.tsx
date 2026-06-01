@@ -13,6 +13,7 @@ import {
   ArtistHero, FloatingPlayer, VinylArtwork 
 } from '@/components/glass';
 import { NavPill } from '@/components/glass/NavPill';
+import { LastFmConnectionCard } from '@/components/LastFmConnectionCard';
 import posthog from "posthog-js";
 
 export default function MusicPlayerPage() {
@@ -159,7 +160,7 @@ export default function MusicPlayerPage() {
   ];
 
   return (
-    <div className="w-screen h-screen overflow-hidden flex bg-[#161616] relative select-none font-sans">
+    <main className="w-screen h-screen overflow-hidden flex bg-[#161616] relative select-none font-sans">
       
       {/* 1. ATMOSPHERIC DEEPLY BLURRED COVER BACKDROP */}
       <div 
@@ -194,7 +195,7 @@ export default function MusicPlayerPage() {
               <div className="w-5.5 h-5.5 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-[10px] text-blue-400 font-bold select-none cursor-pointer">
                 A
               </div>
-              <button className="hover:text-white transition cursor-pointer">
+              <button className="hover:text-white transition cursor-pointer" aria-label="Go back">
                 <ChevronLeft className="w-4 h-4" />
               </button>
             </div>
@@ -212,6 +213,10 @@ export default function MusicPlayerPage() {
               />
               <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-zinc-500 group-focus-within:text-blue-400 transition" />
             </form>
+          </div>
+
+          <div className="px-1">
+            <LastFmConnectionCard />
           </div>
 
           {/* Section 1: Navigation */}
@@ -376,11 +381,11 @@ export default function MusicPlayerPage() {
             
             {/* Back / Forward circular buttons */}
             <div className="flex items-center bg-white/[0.04] border border-white/[0.06] rounded-full p-1.5 gap-1 shadow-lg backdrop-blur-xl">
-              <button className="w-6 h-6 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition duration-200 cursor-pointer">
+              <button className="w-6 h-6 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition duration-200 cursor-pointer" aria-label="Navigate back">
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <span className="w-[1px] h-3.5 bg-white/10" />
-              <button className="w-6 h-6 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition duration-200 cursor-pointer">
+              <button className="w-6 h-6 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition duration-200 cursor-pointer" aria-label="Navigate forward">
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -501,9 +506,9 @@ export default function MusicPlayerPage() {
                   <span className="text-[9px] font-bold text-zinc-500">
                     Nov 4, 2024
                   </span>
-                  <h4 className="text-xs font-bold text-zinc-100 truncate group-hover:text-white">
+                  <p className="text-xs font-bold text-zinc-100 truncate group-hover:text-white">
                     {latestAlbumTitle}
-                  </h4>
+                  </p>
                   <p className="text-[10px] text-zinc-500 truncate font-semibold">
                     {searchResults.length > 0 ? `${searchResults.length} Songs` : '14 Songs'}
                   </p>
@@ -527,6 +532,6 @@ export default function MusicPlayerPage() {
         </div>
       </div>
 
-    </div>
+    </main>
   );
 }

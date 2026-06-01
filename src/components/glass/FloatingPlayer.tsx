@@ -55,7 +55,7 @@ const IconButton = ({
     onClick={onClick}
     disabled={disabled}
     aria-label={label}
-    className={`flex h-11 w-11 items-center justify-center rounded-full border transition ${
+    className={`flex h-12 w-12 items-center justify-center rounded-full border transition ${
       active
         ? 'border-white/[0.18] bg-white/[0.14] text-white'
         : 'border-white/[0.10] bg-white/[0.06] text-white/65 hover:bg-white/[0.12] hover:text-white'
@@ -134,9 +134,9 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({
 
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h4 className="truncate text-[15px] font-semibold text-white sm:text-[17px]">
+                <p className="truncate text-[15px] font-semibold text-white sm:text-[17px]">
                   {activeTrack ? activeTrack.title : 'Not playing'}
-                </h4>
+                </p>
                 <span className="rounded-full border border-white/[0.10] bg-white/[0.06] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.24em] text-white/55">
                   320kb/s
                 </span>

@@ -94,7 +94,7 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -123,7 +123,7 @@ SOFTWARE.`}
                             <div className="h-8 w-8 rounded-full border border-zinc-700 bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-300 mb-4">?</div>
                             <h3 className="text-lg font-semibold text-white mb-2">No Warranty</h3>
                             <p className="text-zinc-400 text-sm leading-relaxed">
-                                The software is provided "as is", without warranty of any kind. We are not liable for any damages or claims.
+                                The software is provided &quot;as is&quot;, without warranty of any kind. We are not liable for any damages or claims.
                             </p>
                         </div>
                     </motion.div>

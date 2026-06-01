@@ -35,6 +35,7 @@ function SpinningDisk() {
                 quality={90}
                 className="object-contain"
                 priority
+                fetchPriority="high"
                 sizes="(max-width: 768px) 100vw, 600px"
                 style={{ transform: "translateZ(0)" }}
             />

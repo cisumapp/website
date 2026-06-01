@@ -108,6 +108,7 @@ export const ArtistHero: React.FC<ArtistHeroProps> = ({
                     : 'border-white/[0.12] bg-black/[0.18] text-white/75 hover:bg-white/[0.12] hover:text-white'
                 }`}
                 aria-pressed={isFavorited}
+                aria-label="Favorite"
               >
                 <Star className={`h-4 w-4 ${isFavorited ? 'fill-sky-200 stroke-none' : ''}`} />
               </button>

@@ -12,11 +12,13 @@ import posthog from "posthog-js";
 
 type Platform = "windows" | "mac" | "linux" | "android" | "ios";
 
+const DISCORD_LINK = "https://discord.gg/Mb4F9Gmuex";
+
 const DOWNLOAD_LINKS: Record<Platform, string> = {
-    windows: "https://github.com/cisumapp/cisum/releases/latest",
-    mac: "https://github.com/cisumapp/cisum/releases/latest",
-    linux: "https://github.com/cisumapp/cisum/releases/latest",
-    android: "https://github.com/cisumapp/cisum/releases/latest",
+    windows: DISCORD_LINK,
+    mac: DISCORD_LINK,
+    linux: DISCORD_LINK,
+    android: DISCORD_LINK,
     ios: "https://testflight.apple.com/join/DA8bhKJH",
 };
 
@@ -29,6 +31,7 @@ const PLATFORM_NAMES: Record<Platform | "unknown", string> = {
     unknown: "your device",
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const PLATFORM_ICONS: Record<Platform | "unknown", any> = {
     windows: Monitor,
     mac: Command,
@@ -39,15 +42,16 @@ const PLATFORM_ICONS: Record<Platform | "unknown", any> = {
 };
 
 export default function DownloadsPage() {
-    const [platform, setPlatform] = useState<Platform | "unknown">("unknown");
+    const [platform, setPlatform] = useState<Platform | "unknown">("ios");
 
     useEffect(() => {
-        const userAgent = navigator.userAgent.toLowerCase();
-        if (userAgent.includes("win")) setPlatform("windows");
-        else if (userAgent.includes("mac")) setPlatform("mac");
-        else if (userAgent.includes("linux")) setPlatform("linux");
-        else if (userAgent.includes("android")) setPlatform("android");
-        else if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod")) setPlatform("ios");
+        // Temporarily forcing iOS as the primary platform
+        // const userAgent = navigator.userAgent.toLowerCase();
+        // if (userAgent.includes("win")) setPlatform("windows");
+        // else if (userAgent.includes("mac")) setPlatform("mac");
+        // else if (userAgent.includes("linux")) setPlatform("linux");
+        // else if (userAgent.includes("android")) setPlatform("android");
+        // else if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod")) setPlatform("ios");
     }, []);
 
     const downloadUrl = platform === "unknown" ? DOWNLOAD_LINKS.windows : DOWNLOAD_LINKS[platform];
@@ -77,10 +81,10 @@ export default function DownloadsPage() {
                             Downloads
                         </Badge>
                         <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl mb-6">
-                            Get App
+                            Get the App
                         </h1>
                         <p className="max-w-2xl mx-auto text-lg text-zinc-400 md:text-xl leading-relaxed">
-                            Available on all your devices. Connect your server and start streaming.
+                            soon available on all your devices.
                         </p>
                     </motion.div>
 
@@ -104,9 +108,9 @@ export default function DownloadsPage() {
                             <h2 className="text-2xl font-bold mb-2">Download for {PLATFORM_NAMES[platform]}</h2>
                             <p className="text-zinc-500 mb-8 text-sm">Latest Version • Free</p>
 
-                            <Button size="lg" className="w-full h-12 rounded-full bg-white text-black hover:bg-zinc-200 transition-all font-semibold" asChild>
+                            <Button size="lg" className="w-full h-12 rounded-full bg-[rgb(162,133,80)] text-[rgb(32,34,46)] hover:bg-[rgb(162,133,80)]/90 hover:scale-105 active:scale-95 transition-all font-semibold shadow-[0_0_15px_rgba(162,133,80,0.3)]" asChild>
                                 <a href={downloadUrl} onClick={() => posthog.capture("download_clicked", { platform, download_url: downloadUrl })}>
-                                    Download Now
+                                    Download via TestFlight
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </a>
                             </Button>
@@ -137,7 +141,7 @@ export default function DownloadsPage() {
                                         </div>
                                         <div className="text-left flex-1">
                                             <div className="font-medium text-zinc-200 group-hover:text-white transition-colors">{PLATFORM_NAMES[p]}</div>
-                                            <div className="text-xs text-zinc-500">Download</div>
+                                            <div className="text-xs text-zinc-500">{p === "ios" ? "Download via TestFlight" : "Updates on Discord"}</div>
                                         </div>
                                         <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-colors -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100" />
                                     </Link>

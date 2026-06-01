@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    images: {
-        qualities: [75, 90],
-    },
     async rewrites() {
         return [
             {
@@ -21,6 +18,10 @@ const nextConfig: NextConfig = {
         ];
     },
     skipTrailingSlashRedirect: true,
+    allowedDevOrigins: ["192.168.31.191"],
+    images: {
+        qualities: [75, 90],
+    },
 };
 
 export default nextConfig;

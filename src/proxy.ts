@@ -10,6 +10,8 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/api/webhooks(.*)",
   "/api/music/health(.*)",
+  "/api/yt/audio(.*)",
+  "/api/proxy(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
@@ -20,7 +22,7 @@ export default clerkMiddleware(async (auth, request) => {
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest|m4a|mp3|mp4|webm|wav|ogg)).*)",
     "/(api|trpc)(.*)",
   ],
 };
