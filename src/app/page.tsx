@@ -65,7 +65,7 @@ export default function Home() {
           <GridRuler />
 
           <div
-            className="absolute top-0 left-1/2 -translate-x-1/2 h-[600px] w-full max-w-[1400px] opacity-30 mix-blend-screen"
+            className="absolute top-0 left-1/2 -translate-x-1/2 h-150 w-full max-w-350 opacity-30 mix-blend-screen"
             style={{
               background:
                 "radial-gradient(circle at center, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0) 60%)",
@@ -175,12 +175,10 @@ export default function Home() {
                 asChild
               >
                 <Link
-                  // href="/downloads"
-                  // href="https://testflight.apple.com/join/DA8bhKJH"
-                  href={"https://discord.gg/Mb4F9Gmuex"}
+                  href="https://testflight.apple.com/join/xDWsYvE1"
                   onClick={() => posthog.capture("hero_download_clicked")}
                 >
-                  Join the Discord
+                  Start Listening
                 </Link>
               </Button>
               {/* DISABLED: Web Player coming soon - using popup instead
@@ -215,7 +213,7 @@ function ClosingSection() {
       onViewportEnter={() => setStartPhysics(true)}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 1 }}
-      className="relative flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden px-6 text-center"
+      className="relative flex min-h-150 w-full flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
       <div className="relative z-10 flex flex-col items-center">
         <Badge
@@ -239,11 +237,10 @@ function ClosingSection() {
           asChild
         >
           <Link
-            // href="/downloads"
-            href={"https://discord.gg/Mb4F9Gmuex"}
+            href="https://testflight.apple.com/join/xDWsYvE1"
             onClick={() => posthog.capture("cta_download_clicked")}
           >
-            Join the Discord
+            Start Listening
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </Button>

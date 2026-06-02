@@ -71,7 +71,7 @@ export function AppLayersAnimation() {
 
   return (
     <div ref={containerRef} className="h-[300vh] relative w-full bg-black/50">
-      <div className="sticky top-0 h-[100dvh] flex flex-col items-center justify-start overflow-hidden pt-12 md:pt-32">
+      <div className="sticky top-0 h-[100dvh] flex flex-col items-center justify-start overflow-hidden pt-22 md:pt-32">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)] pointer-events-none" />
 
         <div className="mb-2 md:mb-4 text-center z-10 px-4 min-h-[140px] md:min-h-[200px] flex flex-col items-center justify-center relative w-full max-w-5xl">
@@ -80,7 +80,7 @@ export function AppLayersAnimation() {
               className="absolute inset-0 flex flex-col justify-center items-center text-center"
               style={{ clipPath: useTransform(slogan1LeftInset, v => `inset(0 0 0 ${v})`) }}
             >
-              <h2 className="text-white text-3xl md:text-5xl font-bold tracking-tight px-4 py-2">
+              <h2 className="text-white text-2xl md:text-5xl font-bold tracking-tight px-4 py-2">
                 {SLOGANS[0].title}
               </h2>
               <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto px-4">
@@ -97,7 +97,7 @@ export function AppLayersAnimation() {
                 )
               }}
             >
-              <h2 className="text-white text-3xl md:text-5xl font-bold tracking-tight px-4 py-2">
+              <h2 className="text-white text-xl md:text-5xl font-bold tracking-tight px-4 py-2">
                 {SLOGANS[1].title}
               </h2>
               <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto px-4">
@@ -109,7 +109,7 @@ export function AppLayersAnimation() {
               className="absolute inset-0 flex flex-col justify-center items-center text-center"
               style={{ clipPath: useTransform(slogan3RightInset, v => `inset(0 ${v} 0 0)`) }}
             >
-              <h2 className="text-white text-3xl md:text-5xl font-bold tracking-tight px-4 py-2">
+              <h2 className="text-white text-2xl md:text-5xl font-bold tracking-tight px-4 py-2">
                 {SLOGANS[2].title}
               </h2>
               <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto px-4">
