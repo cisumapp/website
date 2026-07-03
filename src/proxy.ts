@@ -12,6 +12,13 @@ const isPublicRoute = createRouteMatcher([
   "/api/music/health(.*)",
   "/api/yt/audio(.*)",
   "/api/proxy(.*)",
+  // Deep-link sharing: AASA, shortener API, and public landing pages.
+  "/.well-known/apple-app-site-association",
+  "/api/share(.*)",
+  "/song(.*)",
+  "/playlist(.*)",
+  "/artist(.*)",
+  "/album(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
