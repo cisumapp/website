@@ -11,5 +11,7 @@ export function openInAppURL(entity: string, sp: SearchParams): string {
     if (s) qs.set(key, s);
   }
   const query = qs.toString();
-  return `https://cisum.studio/${entity}${query ? `?${query}` : ""}`;
+  // www is the canonical host that serves the AASA without a redirect, so the button hits a
+  // verified Universal-Link host and opens the app.
+  return `https://www.cisum.studio/${entity}${query ? `?${query}` : ""}`;
 }
